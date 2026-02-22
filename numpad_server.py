@@ -170,7 +170,8 @@ KEY_MAP = {
 # WebSocket サーバー
 # ============================================================
 async def handle_client(websocket):
-    client_ip = websocket.remote_address[0]
+    addr = websocket.remote_address
+    client_ip = addr[0] if addr else "unknown"
     print(f"✅ スマホ接続: {client_ip}")
     try:
         async for message in websocket:
@@ -216,6 +217,8 @@ def get_local_ip():
     try:
         s.connect(("8.8.8.8", 80))
         return s.getsockname()[0]
+    except Exception:
+        return "127.0.0.1"
     finally:
         s.close()
 
